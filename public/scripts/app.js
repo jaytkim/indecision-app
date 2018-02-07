@@ -1,66 +1,95 @@
 'use strict';
 
-// arguments object - no longer bound with arrow functions
+console.log('hello world');
 
-// const add = function(a, b) {
-var add = function add(a, b) {
-    //console.log(arguments);
-    return a + b;
+var app = {
+    title: 'Indecision App',
+    subtitle: 'Put your life in the hands of a computer',
+    options: ['One', 'Two']
 };
-console.log(add(55, 11, 1001));
 
-// this keyword - no longer bound
+var onFormSubmit = function onFormSubmit(e) {
+    e.preventDefault();
 
-var user = {
-    name: 'Andrew',
-    cities: ['Philadelphia', 'New York', 'Dublin'],
-    // ES5
-    // printPlacesLived: function () {
-    // const that = this;
+    var option = e.target.elements.option.value;
 
-    // console.log(this.name);
-    // console.log(this.cities);
-
-    // this.cities.forEach(function (city) {
-    //     console.log(that.name + ' has lived in ' + city);
-    // });
-    // }
-    // ES6
-    printPlacesLived: function printPlacesLived() {
-        var _this = this;
-
-        return this.cities.map(function (city) {
-            return _this.name + ' has lived in ' + city;
-        });
-
-        // const cityMessages = this.cities.map((city) => {
-        //     return this.name + ' has lived in ' + city;
-        // });
-        // return cityMessages;
-
-        // this.cities.forEach((city) => {
-        //     console.log(this.name + ' has lived in ' + city);
-        // });
-    }
-};
-console.log(user.printPlacesLived());
-
-// Challenge area
-
-var multiplier = {
-    // numbers - array of numbers
-    // multiplyBy - single number
-    // muliply = return a new array where the number have been multiplied
-
-    numbers: [1, 5, 9],
-    multiplyBy: 3,
-    multiply: function multiply() {
-        var _this2 = this;
-
-        return this.numbers.map(function (number) {
-            return number * _this2.multiplyBy;
-        });
+    if (option) {
+        app.options.push(option);
+        e.target.elements.option.value = '';
+        render();
     }
 };
 
-console.log(multiplier.multiply());
+var onRemoveAll = function onRemoveAll() {
+    app.options = [];
+    render();
+};
+
+// create "Remove All" button above list
+// on click -> wipe the array -> rerender
+
+var appRoot = document.getElementById('app');
+
+var render = function render() {
+
+    var template = React.createElement(
+        'div',
+        null,
+        React.createElement(
+            'h1',
+            null,
+            app.title
+        ),
+        app.subtitle && React.createElement(
+            'p',
+            null,
+            app.subtitle
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length > 0 ? 'Here are your options' : 'No options'
+        ),
+        React.createElement(
+            'p',
+            null,
+            app.options.length
+        ),
+        React.createElement(
+            'button',
+            { onClick: onRemoveAll },
+            'Remove All'
+        ),
+        React.createElement(
+            'ol',
+            null,
+            React.createElement(
+                'li',
+                null,
+                'Item one'
+            ),
+            React.createElement(
+                'li',
+                null,
+                'Item two'
+            )
+        ),
+        React.createElement(
+            'form',
+            { onSubmit: onFormSubmit },
+            React.createElement('input', { type: 'text', name: 'option' }),
+            React.createElement(
+                'button',
+                null,
+                'Add Option'
+            )
+        )
+    );
+
+    ReactDOM.render(template, appRoot);
+};
+render();
+
+// Create render function that renders the new jsx
+// Call it right away
+// Call it after options array added to
