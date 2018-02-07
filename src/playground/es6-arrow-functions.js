@@ -1,5 +1,3 @@
-'use strict';
-
 // const square = function (x) {
 //     return x * x;
 // };
@@ -23,8 +21,6 @@
 //     return fullName.split(' ')[0];    
 // };
 
-var getFirstName = function getFirstName(fullName) {
-  return fullName.split(' ')[0];
-};
+const getFirstName = (fullName) => fullName.split(' ')[0];
 
 console.log(getFirstName('Mike Smith'));
