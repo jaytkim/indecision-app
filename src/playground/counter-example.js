@@ -7,7 +7,7 @@ class Counter extends React.Component {
         this.handleMinusOne = this.handleMinusOne.bind(this);
         this.handleReset = this.handleReset.bind(this);
         this.state = {
-            count: props.count,
+            count: 0, //props.count,
             name: 'Julie'
         };
     }
@@ -17,6 +17,21 @@ class Counter extends React.Component {
                 count: prevState.count + 1
             };
         });
+    }
+    componentDidMount() {
+        const stringCount = localStorage.getItem('count');
+        const count = parseInt(stringCount, 10);
+
+        if(!isNaN(count)) {
+            this.setState(() => ({ count }));
+            console.log('fetching data');
+        }
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.count !== this.state.count) {
+            localStorage.setItem('count', this.state.count);
+            console.log('saving data ');
+        }
     }
     handleMinusOne() {
         // Call this.setState decrement the count by 1
@@ -29,7 +44,7 @@ class Counter extends React.Component {
     handleReset() {
         this.setState(() => {
             return {
-                count: this.props.count // 0
+                count: 0 //this.props.count
             };
         });
     }
@@ -50,9 +65,9 @@ class Counter extends React.Component {
 // Use console.log to print method name
 // Wire up onClick & bind in the constructor
 
-Counter.defaultProps = {
-    count: 0
-}
+// Counter.defaultProps = {
+//     count: 0
+// }
 
 ReactDOM.render(<Counter />, document.getElementById('app'));
 
